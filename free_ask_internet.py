@@ -35,7 +35,8 @@ def search_web_ref(query:str, debug=False):
 
         safe_string = urllib.parse.quote_plus(":all !general " + query)
 
-        response = requests.get('http://searxng:8080?q=' + safe_string + '&format=json')
+        searxng_url = os.getenv('SEARXNG_BASE_URL', 'http://localhost:8080')
+        response = requests.get(searxng_url + '?q=' + safe_string + '&format=json')
         response.raise_for_status()
         search_results = response.json()
  
@@ -172,7 +173,7 @@ def chat(prompt, model:str,llm_auth_token:str,llm_base_url:str,using_custom_llm=
     openai.base_url = "http://127.0.0.1:3040/v1/"
 
     if model == "gpt3.5":
-        openai.base_url = "http://llm-freegpt35:3040/v1/"
+        openai.base_url = os.getenv('OPENAI_URL', 'http://llm-freegpt35:3040/v1/')
     
     if model == "kimi":
         openai.base_url = "http://llm-kimi:8000/v1/"
